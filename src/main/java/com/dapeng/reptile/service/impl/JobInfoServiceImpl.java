@@ -6,11 +6,13 @@ import com.dapeng.reptile.service.JobInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName: JobInfoServiceImpl
- * @Description:
- * @author: renzhipeng
- * @date: 2021年01月05日 14:06:22
+ * @Description: 工作信息业务实现类
+ * @author: DaPeng
+ * @date: 2021年01月05日 下午2:06:22
  */
 @Service
 public class JobInfoServiceImpl implements JobInfoService {
@@ -26,5 +28,10 @@ public class JobInfoServiceImpl implements JobInfoService {
 	@Override
 	public void deleteTable() {
 		jobInfoDao.deleteTable();
+	}
+
+	@Override
+	public List<JobInfo> selectAllJobInfo() {
+		return jobInfoDao.selectAllJobInfo();
 	}
 }

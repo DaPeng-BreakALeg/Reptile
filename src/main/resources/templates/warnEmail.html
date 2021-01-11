@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>whatever</title>
+  <style>
+    body{
+      background: #e9ebee;
+    }
+    h1{
+      color: #f56c8b;
+    }
+    .container{
+      margin: 0 auto;
+      padding: 18px 25px;
+      background-color: #fff;
+    }
+    p{
+      line-height: 2;
+      color: #000000d9;
+    }
+    .sender-info div{
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Java岗位信息列表</h1>
+    <p>
+      	您好：<br>
+      	&nbsp;&nbsp;&nbsp;本邮件为系统自动爬取Java工作信息数据，<br>
+      	&nbsp;&nbsp;&nbsp;如有问题请自己登陆拉勾网查询数据。<br>
+    </p>
+    <div class="sender-info">
+      <div>whatever</div>
+      <div><b>日期:</b> <span th:text=${sendTime}></span></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,6 +1,31 @@
 spring:
   datasource:
-    username: root
-    password: input your own password
-    url: input your own url
+    username: input user own database username
+    password: input user own database password
+    url: input user own database url
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  mail:
+    host: input user own email host
+    username: input user own email username
+    password: input user own email password
+    from: input user own email username
+    default-encoding: utf-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          port: 465
+          starttls:
+            enable: false
+            required: false
+          ssl:
+            enable: false
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+        display:
+          sendmail: whatever
+          sendname: whatever
+    resources:
+      static-locations: classpath:/templates/

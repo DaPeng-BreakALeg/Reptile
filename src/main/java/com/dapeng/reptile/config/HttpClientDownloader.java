@@ -26,10 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author 咸鱼
- * @date 2018/12/28 21:22
+ * @ClassName: HttpClientDownloader
+ * @Description: 重新自定义下载类，解除拉勾网下载限制
+ * @author: DaPeng
+ * @date: 2021年01月05日 下午3:53:21
  */
 public class HttpClientDownloader extends AbstractDownloader {
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
@@ -80,8 +83,11 @@ public class HttpClientDownloader extends AbstractDownloader {
 		HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxy);
 		Page page = Page.fail();
 		try {
-			httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
-			page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
+			httpResponse = httpClient
+					.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
+			page = handleResponse(request,
+					request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse,
+					task);
 			onSuccess(request);
 			logger.info("downloading page success {}", request.getUrl());
 			return page;
@@ -91,7 +97,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 			return page;
 		} finally {
 			if (httpResponse != null) {
-				//ensure the connection is released back to pool
+				// ensure the connection is released back to pool
 				EntityUtils.consumeQuietly(httpResponse.getEntity());
 			}
 			if (proxyProvider != null && proxy != null) {
@@ -105,12 +111,15 @@ public class HttpClientDownloader extends AbstractDownloader {
 		httpClientGenerator.setPoolSize(thread);
 	}
 
-	protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
+	protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task)
+			throws IOException {
 		byte[] bytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-		String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
+		String contentType = httpResponse.getEntity().getContentType() == null ?
+				"" :
+				httpResponse.getEntity().getContentType().getValue();
 		Page page = new Page();
 		page.setBytes(bytes);
-		if (!request.isBinaryContent()){
+		if (!request.isBinaryContent()) {
 			if (charset == null) {
 				charset = getHtmlCharset(contentType, bytes);
 			}
@@ -131,10 +140,12 @@ public class HttpClientDownloader extends AbstractDownloader {
 		String charset = CharsetUtils.detectCharset(contentType, contentBytes);
 		if (charset == null) {
 			charset = Charset.defaultCharset().name();
-			logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
+			logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()",
+					Charset.defaultCharset());
 		}
 		return charset;
 	}
+
 }
 
 

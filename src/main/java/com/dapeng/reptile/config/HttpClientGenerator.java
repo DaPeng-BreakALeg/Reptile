@@ -31,8 +31,10 @@ import java.security.cert.X509Certificate;
 import java.util.Map;
 
 /**
- * @author 咸鱼
- * @date 2018/12/28 21:19
+ * @ClassName: HttpClientGenerator
+ * @Description: 连接生成
+ * @author: DaPeng
+ * @date: 2021年01月05日 下午3:53:21
  */
 public class HttpClientGenerator {
 
@@ -43,8 +45,7 @@ public class HttpClientGenerator {
 	public HttpClientGenerator() {
 		Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
 				.register("http", PlainConnectionSocketFactory.INSTANCE)
-				.register("https", buildSSLConnectionSocketFactory())
-				.build();
+				.register("https", buildSSLConnectionSocketFactory()).build();
 		connectionManager = new PoolingHttpClientConnectionManager(reg);
 		connectionManager.setDefaultMaxPerRoute(100);
 	}
@@ -52,9 +53,8 @@ public class HttpClientGenerator {
 	private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
 		try {
 			// 优先绕过安全证书
-			return new SSLConnectionSocketFactory(createIgnoreVerifySSL(), new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"},
-					null,
-					new DefaultHostnameVerifier());
+			return new SSLConnectionSocketFactory(createIgnoreVerifySSL(),
+					new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"}, null, new DefaultHostnameVerifier());
 		} catch (KeyManagementException e) {
 			logger.error("ssl connection fail", e);
 		} catch (NoSuchAlgorithmException e) {
@@ -83,7 +83,7 @@ public class HttpClientGenerator {
 		};
 
 		SSLContext sc = SSLContext.getInstance("SSLv3");
-		sc.init(null, new TrustManager[] { trustManager }, null);
+		sc.init(null, new TrustManager[]{trustManager}, null);
 		return sc;
 	}
 
@@ -109,16 +109,15 @@ public class HttpClientGenerator {
 			httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 
 				@Override
-				public void process(
-						final HttpRequest request,
-						final HttpContext context) throws HttpException, IOException {
+				public void process(final HttpRequest request, final HttpContext context)
+						throws HttpException, IOException {
 					if (!request.containsHeader("Accept-Encoding")) {
 						request.addHeader("Accept-Encoding", "gzip");
 					}
 				}
 			});
 		}
-		//解决post/redirect/post 302跳转问题
+		// 解决post/redirect/post 302跳转问题
 		httpClientBuilder.setRedirectStrategy(new CustomRedirectStrategy());
 
 		SocketConfig.Builder socketConfigBuilder = SocketConfig.custom();
